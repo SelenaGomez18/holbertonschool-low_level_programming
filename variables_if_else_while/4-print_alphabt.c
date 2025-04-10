@@ -11,12 +11,10 @@
 int main(void)
 {
 	char character;
-
-	
 	/* It loops through alphabet */
 	for (character = 'a'; character <= 'z'; character++)
 	{
-		if (character !='e' && character !='q')
+		if (character != 'e' && character != 'q')
 		{
 			putchar(character);  /* It prints each character */
 		}
