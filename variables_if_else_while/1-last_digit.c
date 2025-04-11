@@ -5,8 +5,12 @@
 /**
  * main - Entry point
  *
- * Return: Always 0 (indicating success)
+ * Description: Assign a random number to variable n and
+ * prints if the number is positive, negative or zero.
+ *
+ * Return: 0 (Always success)
  */
+
 int main(void)
 {
 	int n;
