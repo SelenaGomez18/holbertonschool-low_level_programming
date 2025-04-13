@@ -1,0 +1,1 @@
+This is project is for learning to funtions and nested loops in lenguage c
