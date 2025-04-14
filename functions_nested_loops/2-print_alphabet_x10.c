@@ -1,8 +1,8 @@
 #include "main.h"
 
 /**
- * print_alphabet - Imprime el abecedario en minúsculas
- * seguido de nueva línea
+ * print_alphabet - print alphabet in lowercase
+ * followed new line
  */
 void print_alphabet(void)
 {
