@@ -4,16 +4,16 @@
 /**
  * swap_int - swaps the values of two integers
  *
- * @p: pointer to the first integer
- * @q: pointer to the second integer
+ * @a: pointer to the first integer
+ * @b: pointer to the second integer
  *
  * Return - void
  */
-void swap_int(int *p, int *q)
+void swap_int(int *a, int *b)
 {
 	int c;
 
-	c = *p;
-	*p= *q;
-	*q = c;
+	c = *a;
+	*a = *b;
+	*b = c;
 }
