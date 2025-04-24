@@ -12,6 +12,7 @@
  int _strlen(char *);
  void _puts(char *);
  int _putchar(char);
+ void print_rev(char *);
 
  #endif /*_MAIN_H_ */
  
