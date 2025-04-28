@@ -1,8 +1,10 @@
+#include "main.h"
+
 /**
- * _atoi - Converts a string to an integer.
+ * _atoi - Converts a string to an integer, handling integer overflow and underflow.
  * @s: The string to convert.
  *
- * Return: The converted integer value. Returns 0 if no digits found.
+ * Return: The converted integer value, or the overflow/underflow boundaries.
  */
 int _atoi(char *s)
 {
@@ -22,7 +24,13 @@ int _atoi(char *s)
 		{
 			found_digit = 1;
 
-			/* Convert the digit character to int and build the result */
+			/* Check for overflow before updating result */
+			if (result > (2147483647 - (s[i] - '0')) / 10)
+			{
+				/* Handle overflow */
+				return (sign == 1) ? 2147483647 : -2147483648;
+			}
+
 			result = result * 10 + (s[i] - '0');
 		}
 		else if (found_digit)
