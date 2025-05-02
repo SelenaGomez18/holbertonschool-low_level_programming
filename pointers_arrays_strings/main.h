@@ -20,6 +20,7 @@
  char *_strcpy(char *, char *);
  int _atoi(char *);
  char *_strcat(char *, char *);
+ char *_strncat(char *dest, char *src, int n);
 
  #endif /*_MAIN_H_ */
  
