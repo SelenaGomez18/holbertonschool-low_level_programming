@@ -23,6 +23,7 @@
  char *_strncat(char *, char *, int );
  char *_strncpy(char *, char *, int);
  void reverse_array(int *, int );
+ int _strcmp(char *, char *);
  char *string_toupper(char *);
  char *cap_string(char *);
 
