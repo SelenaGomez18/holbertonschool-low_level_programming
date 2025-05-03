@@ -23,6 +23,10 @@ char *cap_string(char *s)
 				s[a + 1] -= 32;
 			}
 	}
+	if (s[0] >= 'a' && s[0] <= 'z')
+	{
+		s[0] -= 32;
+	}
 
 	return (s);
 }
