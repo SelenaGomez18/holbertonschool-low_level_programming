@@ -20,7 +20,9 @@
  char *_strcpy(char *, char *);
  int _atoi(char *);
  char *_strcat(char *, char *);
- char *_strncat(char *dest, char *src, int n);
+ char *_strncat(char *, char *, int );
+ void reverse_array(int *, int );
+ char *string_toupper(char *);
 
  #endif /*_MAIN_H_ */
  
