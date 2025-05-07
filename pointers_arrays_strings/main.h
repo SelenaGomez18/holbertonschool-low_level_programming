@@ -28,6 +28,9 @@
  char *string_toupper(char *);
  char *cap_string(char *);
  char *leet(char *);
+ char *_memset(char *, char, unsigned int);
+ char *_memcpy(char *, char *, unsigned int);
+ char *_strchr(char *, char);
 
  #endif /*_MAIN_H_ */
  
