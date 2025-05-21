@@ -3,7 +3,7 @@
 #include <ctype.h>
 
 /**
- * main - Entry point
+ * main - Entry poin
  *
  * @argc: Arg. count
  * @argv: Arg. vector
