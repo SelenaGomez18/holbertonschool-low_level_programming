@@ -3,7 +3,7 @@
 /**
  * 
  */
-int main(int argc, int **argc)
+int main(int argc, char *argv[])
 {
     (void) argc;
 
