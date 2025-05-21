@@ -7,7 +7,7 @@
  * @argc: Argm. count
  * @argv: Argm. vector
  *
- * Return: 0 on success
+ * Return: 0 on success, 1 on error
  */
 int main(int argc, char *argv[])
 {
@@ -23,16 +23,16 @@ int main(int argc, char *argv[])
 
 	cents = atoi(argv[1]);
 
-	if (coins < 0)
+	if (cents < 0)
 	{
 		printf("0\n");
-		return (-1);
+		return (0);
 	}
 
 	for (i = 0; i < 5; i++)
 	{
 		coins += cents / denomination[i];
-		cents = cents % denomination[i];
+		cents %= denomination[i];
 	}
 	printf("%d\n", coins);
 	return (0);
