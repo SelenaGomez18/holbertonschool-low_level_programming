@@ -1,20 +1,14 @@
-#ifndef _DOG_H_
-#define _DOG_H_
+#ifndef DOG_H
+#define DOG_H
 
-/*
- * Structs, enums and unions definitions
- * Typedefs
- * Function prototypes
+/**
+ * struct dog - A structure to store basic information about a dog
+ * @name: A pointer to a string representing the dog's name
+ * @age: A float representing the dog's age
+ * @owner: A pointer to a string representing the owner's name
+ *
+ * Description: This structure holds the name, age, and owner of a dog.
  */
-
- /**
-  * struct dog - Define a new type structure dog
-  * @name: char * name of the dog
-  * @age: char * name of the dog
-  * @owner: char * owner of the dog
-  *
-  * Description: longer description
-  */
 struct dog
 {
 	char *name;
@@ -22,7 +16,13 @@ struct dog
 	char *owner;
 };
 
-void init_dog(struct dog *, char *, float, char *);
-void print_dog(struct dog *);
+/**
+ * init_dog - Initializes a variable of type struct dog
+ * @d: Pointer to the struct dog to initialize
+ * @name: Name to assign
+ * @age: Age to assign
+ * @owner: Owner to assign
+ */
+void init_dog(struct dog *d, char *name, float age, char *owner);
 
-#endif /*_DOG_H_ */
+#endif /* DOG_H */
