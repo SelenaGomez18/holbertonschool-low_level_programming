@@ -9,12 +9,12 @@
  *
  * Description: This structure holds the name, age, and owner of a dog.
  */
-struct dog
+typedef struct dog
 {
 	char *name;
 	float age;
 	char *owner;
-};
+} dog_t;
 
 /**
  * init_dog - Initializes a variable of type struct dog
