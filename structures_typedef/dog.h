@@ -23,7 +23,8 @@ typedef struct dog
  * @age: Age to assign
  * @owner: Owner to assign
  */
-void init_dog(struct dog *d, char *name, float age, char *owner);
-void print_dog(struct dog *d);
+void init_dog(struct dog *, char *, float, char *);
+void print_dog(struct dog *);
+dog_t *new_dog(char *, float, char *);
 
 #endif /* DOG_H */
