@@ -26,16 +26,19 @@ int _strlen(char *s)
  */
 dog_t *new_dog(char *name, float age, char *owner)
 {
-	int i, s;
+	int i, a;
 	dog_t *new_coco;
-	char *name_copy, *owner_copy;
 
 	new_coco = malloc(sizeof(dog_t));
 	if (new_coco == NULL)
 		return (NULL);
 
 	i = _strlen(name);
-	s = _strlen(owner);
+	a = _strlen(owner);
 
 	new_coco->name = malloc(sizeof(char) * (i + 1));
+	new_coco->owner = malloc(sizeof(char) * (a + 1));
+	new_coco->age = age;
+
+	return (new_coco);
 }
