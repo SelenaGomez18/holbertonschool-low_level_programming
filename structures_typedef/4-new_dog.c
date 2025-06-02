@@ -12,10 +12,36 @@ int _strlen(char *s)
 	int a = 0;
 
 	for (; s[a] != '\0'; a++)
-	;
+		;
 
 	return (a);
 }
+
+/**
+ * _strncpy - Copies a string up to n characters
+ * @dest: destination string
+ * @src: source string
+ * @n: number of characters to copy
+ *
+ * Return: destination string
+ */
+char *_strncpy(char *dest, char *src, int n)
+{
+	int a = 0;
+
+	for (; a < n && src[a] != '\0'; a++)
+	{
+		dest[a] = src[a];
+	}
+
+	for (; a < n; a++)
+	{
+		dest[a] = '\0';
+	}
+
+	return (dest);
+}
+
 /**
  * new_dog - Creates a new dog struct with copies of name and owner.
  * @name: Pointer to a string containing the name of the dog.
@@ -26,7 +52,7 @@ int _strlen(char *s)
  */
 dog_t *new_dog(char *name, float age, char *owner)
 {
-	int i, a;
+	int i, j;
 	dog_t *new_coco;
 
 	new_coco = malloc(sizeof(dog_t));
@@ -34,10 +60,25 @@ dog_t *new_dog(char *name, float age, char *owner)
 		return (NULL);
 
 	i = _strlen(name);
-	a = _strlen(owner);
+	j = _strlen(owner);
 
 	new_coco->name = malloc(sizeof(char) * (i + 1));
-	new_coco->owner = malloc(sizeof(char) * (a + 1));
+	if (new_coco->name == NULL)
+	{
+		free(new_coco);
+		return (NULL);
+	}
+	_strncpy(new_coco->name, name, i + 1);
+
+	new_coco->owner = malloc(sizeof(char) * (j + 1));
+	if (new_coco->owner == NULL)
+	{
+		free(new_coco->name);
+		free(new_coco);
+		return (NULL);
+	}
+	_strncpy(new_coco->owner, owner, j + 1);
+
 	new_coco->age = age;
 
 	return (new_coco);
