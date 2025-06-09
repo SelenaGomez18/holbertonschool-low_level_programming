@@ -19,5 +19,7 @@ int op_mul(int, int);
 int op_div(int, int);
 int op_mod(int, int);
 int (*get_op_func(char *))(int, int);
+int _strcmp(char *s1, char *s2);
+
 
 #endif /*_CALC_H_ */
