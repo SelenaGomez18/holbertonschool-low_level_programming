@@ -20,13 +20,15 @@ int (*get_op_func(char *s))(int, int)
 		{"%", op_mod},
 		{NULL, NULL}
 	};
-	int i;
+	int i = 0;
 
-	for (i = 0; i < 6; i++)
+	while (ops[i].op != NULL)
 	{
 		if (strcmp(ops[i].op, s) == 0)
 			return (ops[i].f);
+		i++;
 	}
+
 	printf("Error\n");
 	exit(99);
 }
