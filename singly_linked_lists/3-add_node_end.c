@@ -1,6 +1,6 @@
 #include "lists.h"
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * _strlen - Returns the length of a string
@@ -17,13 +17,14 @@ int _strlen(char *s)
 
 	return (a);
 }
-
 /**
  * 
  */
-list_t *add_node(list_t **head, const char *str)
+list_t *add_node_end(list_t **head, const char *str)
 {
+    
     list_t *new = NULL;
+    list_t *i = NULL;
 
     if (!str)
         return (NULL);
@@ -36,10 +37,17 @@ list_t *add_node(list_t **head, const char *str)
     new->len = _strlen(new->str);
     new->next = NULL;
 
-    if(*head != NULL)
-        new->next = *head;
-        
-    *head = new;
-
+    if(*head == NULL)
+    {
+        *head = new;
+    }
+    else
+    {
+        for (i = *head; i->next != NULL; i = i->next)
+            ;
+    
+        i->next = new;
+    }
+    
     return (new);
 }
