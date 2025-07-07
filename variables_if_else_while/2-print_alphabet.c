@@ -9,12 +9,12 @@
  */
 int main(void)
 {
-char letra;
+char character;
 
-/* Imprimir las letras del abecedario en minúsculas */
-for (letra = 'a'; letra <= 'z'; letra++)
+/* Imprimir las characters del abecedario en minúsculas */
+for (character = 'a'; character <= 'z'; character++)
 {
-putchar(letra);  /* Imprime cada letra */
+putchar(character);  /* Imprime cada character */
 }
 putchar('\n');  /* Añadir un salto de línea al final */
 return (0);

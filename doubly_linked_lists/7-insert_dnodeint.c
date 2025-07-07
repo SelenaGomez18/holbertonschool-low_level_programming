@@ -2,52 +2,44 @@
 #include <stdlib.h>
 
 /**
- * insert_dnodeint_at_index - Inserts a new node at a
- * given index in a dlistint_t list
- * @h: Double pointer to the head of the list
- * @idx: Index at which to insert the new node (starting from 0)
- * @n: Integer data to store in the new node
+ * insert_dnodeint_at_index - Inserts a new node at a given index
+ *                            in a doubly linked list
+ * @h: Pointer to a pointer to the head of the list
+ * @idx: Index where the new node should be inserted (starting at 0)
+ * @n: Value to store in the new node
  *
  * Return: Address of the new node, or NULL if it failed
  */
 dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
-	dlistint_t *new = NULL, *current = NULL;
-	unsigned int i;
-
-	if (h == NULL)
-		return (NULL);
+	dlistint_t *new, *temp = *h;
+	unsigned int i = 0;
 
 	if (idx == 0)
 		return (add_dnodeint(h, n));
 
-	current = *h;
-
-	for (i = 0; current != NULL; i++, current = current->next)
+	while (temp != NULL)
 	{
 		if (i == idx - 1)
 		{
-			if (current->next == NULL)
-				return (add_dnodeint_end(h, n));
-
 			new = malloc(sizeof(dlistint_t));
 			if (new == NULL)
 				return (NULL);
 
 			new->n = n;
-			new->next = current->next;
-			new->prev = current;
-			current->next->prev = new;
-			current->next = new;
+			new->next = temp->next;
+			new->prev = temp;
+
+			if (temp->next != NULL)
+				temp->next->prev = new;
+
+			temp->next = new;
 
 			return (new);
 		}
-		current = current->next;
+		temp = temp->next;
+		i++;
 	}
 
-	if (i == idx)
-		return (add_dnodeint_end(h, n));
-
 	return (NULL);
-
 }
