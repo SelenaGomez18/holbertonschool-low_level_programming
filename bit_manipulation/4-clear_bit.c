@@ -5,7 +5,7 @@
  * @n: Pointer to the number whose bit is to be cleared
  * @index: Index of the bit to clear (starting from 0)
  *
- * Return: 1 if successful, -1 if an error occurred (e.g., index out of range)
+ * Return: 1 if successful, -1 if an error occurred
  */
 int clear_bit(unsigned long int *n, unsigned int index)
 {
