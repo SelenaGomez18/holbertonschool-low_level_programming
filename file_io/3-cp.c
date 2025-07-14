@@ -7,57 +7,58 @@
 #define BUF_SIZE 1024
 
 /**
- * print_error_and_exit - prints an error message with file name and exits
+ * print_error_and_exit - prints error message and exits
  * @code: exit code
  * @msg: error message format string
- * @file: file name to print in message
+ * @arg: argument for message (filename or fd as int casted to void*)
  */
-void print_error_and_exit(int code, char *msg, char *file)
+void print_error_and_exit(int code, char *msg, void *arg)
 {
-	dprintf(STDERR_FILENO, msg, file);
+	if (msg && arg)
+	{
+		if (code == 100)
+			dprintf(STDERR_FILENO, msg, (int)(long)arg);
+		else
+			dprintf(STDERR_FILENO, msg, (char *)arg);
+	}
 	exit(code);
 }
 
 /**
- * print_error_fd_and_exit - prints an error message with fd and exits
- * @code: exit code
- * @fd: file descriptor causing error
- */
-void print_error_fd_and_exit(int code, int fd)
-{
-	dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
-	exit(code);
-}
-
-/**
- * copy_file - copies content from file_from to file_to
+ * open_files - opens source and destination files, returns 0 on success
  * @file_from: source file path
  * @file_to: destination file path
+ * @fd_from: pointer to store source fd
+ * @fd_to: pointer to store destination fd
  */
-void copy_file(char *file_from, char *file_to)
+void open_files(char *file_from, char *file_to, int *fd_from, int *fd_to)
 {
-	int fd_from, fd_to;
-	ssize_t r, w;
-	char buf[BUF_SIZE];
-	mode_t old_mask;
+	mode_t old_mask = umask(0);
 
-	/* open source file for reading */
-	fd_from = open(file_from, O_RDONLY);
-	if (fd_from == -1)
+	*fd_from = open(file_from, O_RDONLY);
+	if (*fd_from == -1)
 		print_error_and_exit(98, "Error: Can't read from file %s\n", file_from);
 
-	/* set permissions mask, open destination file with truncation */
-	old_mask = umask(0);
-	fd_to = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	*fd_to = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	umask(old_mask);
 
-	if (fd_to == -1)
+	if (*fd_to == -1)
 	{
-		close(fd_from);
+		close(*fd_from);
 		print_error_and_exit(99, "Error: Can't write to %s\n", file_to);
 	}
+}
 
-	/* read from source and write to destination */
+/**
+ * copy_data - copies data from fd_from to fd_to, exits on failure
+ * @fd_from: source file descriptor
+ * @fd_to: destination file descriptor
+ */
+void copy_data(int fd_from, int fd_to)
+{
+	ssize_t r, w;
+	char buf[BUF_SIZE];
+
 	while ((r = read(fd_from, buf, BUF_SIZE)) > 0)
 	{
 		w = write(fd_to, buf, r);
@@ -65,38 +66,54 @@ void copy_file(char *file_from, char *file_to)
 		{
 			close(fd_from);
 			close(fd_to);
-			print_error_and_exit(99, "Error: Can't write to %s\n", file_to);
+			print_error_and_exit(99, "Error: Can't write to file\n", NULL);
 		}
 	}
 
-	/* check read error */
 	if (r == -1)
 	{
 		close(fd_from);
 		close(fd_to);
-		print_error_and_exit(98, "Error: Can't read from file %s\n", file_from);
+		print_error_and_exit(98, "Error: Can't read from file\n", NULL);
 	}
-
-	/* close file descriptors, check errors */
-	if (close(fd_from) == -1)
-		print_error_fd_and_exit(100, fd_from);
-	if (close(fd_to) == -1)
-		print_error_fd_and_exit(100, fd_to);
 }
 
 /**
- * main - program entry point, validates args and copies files
+ * close_fds - closes file descriptors and handles errors
+ * @fd_from: source file descriptor
+ * @fd_to: destination file descriptor
+ */
+void close_fds(int fd_from, int fd_to)
+{
+	if (close(fd_from) == -1)
+		print_error_and_exit(100,
+			"Error: Can't close fd %d\n", (void *)(long)fd_from);
+
+	if (close(fd_to) == -1)
+		print_error_and_exit(100,
+			"Error: Can't close fd %d\n", (void *)(long)fd_to);
+
+}
+
+/**
+ * main - entry point, checks args and runs copy process
  * @argc: argument count
  * @argv: argument vector
- * Return: 0 on success, exits on failure
+ * Return: 0 on success, exits on error
  */
 int main(int argc, char *argv[])
 {
+	int fd_from, fd_to;
+
 	if (argc != 3)
 	{
 		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
-	copy_file(argv[1], argv[2]);
+
+	open_files(argv[1], argv[2], &fd_from, &fd_to);
+	copy_data(fd_from, fd_to);
+	close_fds(fd_from, fd_to);
+
 	return (0);
 }
