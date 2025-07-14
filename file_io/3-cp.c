@@ -3,14 +3,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #define BUF_SIZE 1024
 
 /**
- * print_error_and_exit - prints error message and exits
- * @code: exit code
- * @msg: error message format string
- * @arg: argument for message (filename or fd as int casted to void*)
+ * print_error_and_exit - prints error message and exits program
+ * @code: exit code to use
+ * @msg: format string for error message
+ * @arg: argument for format string (filename or fd casted to void*)
  */
 void print_error_and_exit(int code, char *msg, void *arg)
 {
@@ -25,11 +26,14 @@ void print_error_and_exit(int code, char *msg, void *arg)
 }
 
 /**
- * open_files - opens source and destination files, returns 0 on success
- * @file_from: source file path
- * @file_to: destination file path
- * @fd_from: pointer to store source fd
- * @fd_to: pointer to store destination fd
+ * open_files - opens source and destination files
+ * @file_from: path to source file
+ * @file_to: path to destination file
+ * @fd_from: pointer to store source file descriptor
+ * @fd_to: pointer to store destination file descriptor
+ *
+ * Opens file_from for reading and file_to for writing (create/truncate).
+ * Exits with error if any open fails.
  */
 void open_files(char *file_from, char *file_to, int *fd_from, int *fd_to)
 {
@@ -50,13 +54,15 @@ void open_files(char *file_from, char *file_to, int *fd_from, int *fd_to)
 }
 
 /**
- * copy_data - copies data from fd_from to fd_to, exits on failure
+ * copy_data - copies data from one file descriptor to another
  * @fd_from: source file descriptor
  * @fd_to: destination file descriptor
- * @file_from: source filename (for error messages)
- * @file_to: destination filename (for error messages)
+ * @file_to: destination filename for error messages
+ *
+ * Reads from fd_from and writes to fd_to until done.
+ * Exits with error on read or write failure.
  */
-void copy_data(int fd_from, int fd_to, char *file_from, char *file_to)
+void copy_data(int fd_from, int fd_to, char *file_to)
 {
 	ssize_t r, w;
 	char buf[BUF_SIZE];
@@ -76,14 +82,16 @@ void copy_data(int fd_from, int fd_to, char *file_from, char *file_to)
 	{
 		close(fd_from);
 		close(fd_to);
-		print_error_and_exit(98, "Error: Can't read from file %s\n", file_from);
+		print_error_and_exit(98, "Error: Can't read from file %s\n", file_to);
 	}
 }
 
 /**
- * close_fds - closes file descriptors and handles errors
+ * close_fds - closes two file descriptors and exits on failure
  * @fd_from: source file descriptor
  * @fd_to: destination file descriptor
+ *
+ * Closes both descriptors; exits with code 100 if close fails.
  */
 void close_fds(int fd_from, int fd_to)
 {
@@ -97,10 +105,14 @@ void close_fds(int fd_from, int fd_to)
 }
 
 /**
- * main - entry point, checks args and runs copy process
+ * main - entry point, checks arguments and performs file copy
  * @argc: argument count
  * @argv: argument vector
- * Return: 0 on success, exits on error
+ *
+ * Expects exactly 2 arguments: source and destination file paths.
+ * Exits on invalid arguments or any file operation error.
+ *
+ * Return: 0 on success.
  */
 int main(int argc, char *argv[])
 {
@@ -112,8 +124,14 @@ int main(int argc, char *argv[])
 		exit(97);
 	}
 
+	if (strcmp(argv[1], argv[2]) == 0)
+	{
+		dprintf(STDERR_FILENO, "Error: source and destination files are the same\n");
+		exit(99);
+	}
+
 	open_files(argv[1], argv[2], &fd_from, &fd_to);
-	copy_data(fd_from, fd_to, argv[1], argv[2]);
+	copy_data(fd_from, fd_to, argv[2]);
 	close_fds(fd_from, fd_to);
 
 	return (0);
