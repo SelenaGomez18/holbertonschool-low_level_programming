@@ -74,8 +74,9 @@ void print_data(unsigned char ident[])
 
 void print_version(unsigned char ident[])
 {
-    printf("  %-35s%u %s\n", "Version:", ident[EI_VERSION],
-           ident[EI_VERSION] == EV_CURRENT ? "(current)" : "");
+	printf("  %-35s%u%s\n", "Version:", ident[EI_VERSION],
+       ident[EI_VERSION] == EV_CURRENT ? " (current)" : "");
+
 }
 
 void print_osabi(unsigned char ident[])
