@@ -2,6 +2,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 #define BUFFER_SIZE 1024
 
@@ -13,17 +14,10 @@
  */
 void print_error(int code, const char *msg, const char *file)
 {
-	int i = 0;
-
-	while (msg[i])
-		write(STDERR_FILENO, &msg[i++], 1);
 	if (file)
-	{
-		i = 0;
-		while (file[i])
-			write(STDERR_FILENO, &file[i++], 1);
-	}
-	write(STDERR_FILENO, "\n", 1);
+		dprintf(STDERR_FILENO, "%s%s\n", msg, file);
+	else
+		dprintf(STDERR_FILENO, "%s\n", msg);
 	exit(code);
 }
 
@@ -35,7 +29,7 @@ void print_error(int code, const char *msg, const char *file)
  * @file_to: Destination file name for errors
  */
 void transfer_data(int fd_from, int fd_to,
-				   const char *file_from, const char *file_to)
+		     const char *file_from, const char *file_to)
 {
 	int r_bytes, w_bytes;
 	char buffer[BUFFER_SIZE];
