@@ -53,8 +53,10 @@ void open_files(char *file_from, char *file_to, int *fd_from, int *fd_to)
  * copy_data - copies data from fd_from to fd_to, exits on failure
  * @fd_from: source file descriptor
  * @fd_to: destination file descriptor
+ * @file_from: source filename (for error messages)
+ * @file_to: destination filename (for error messages)
  */
-void copy_data(int fd_from, int fd_to)
+void copy_data(int fd_from, int fd_to, char *file_from, char *file_to)
 {
 	ssize_t r, w;
 	char buf[BUF_SIZE];
@@ -66,7 +68,7 @@ void copy_data(int fd_from, int fd_to)
 		{
 			close(fd_from);
 			close(fd_to);
-			print_error_and_exit(99, "Error: Can't write to file\n", NULL);
+			print_error_and_exit(99, "Error: Can't write to %s\n", file_to);
 		}
 	}
 
@@ -74,7 +76,7 @@ void copy_data(int fd_from, int fd_to)
 	{
 		close(fd_from);
 		close(fd_to);
-		print_error_and_exit(98, "Error: Can't read from file\n", NULL);
+		print_error_and_exit(98, "Error: Can't read from file %s\n", file_from);
 	}
 }
 
@@ -92,7 +94,6 @@ void close_fds(int fd_from, int fd_to)
 	if (close(fd_to) == -1)
 		print_error_and_exit(100,
 			"Error: Can't close fd %d\n", (void *)(long)fd_to);
-
 }
 
 /**
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
 	}
 
 	open_files(argv[1], argv[2], &fd_from, &fd_to);
-	copy_data(fd_from, fd_to);
+	copy_data(fd_from, fd_to, argv[1], argv[2]);
 	close_fds(fd_from, fd_to);
 
 	return (0);
